@@ -13,8 +13,8 @@ import java.util.UUID;
 
 @Service
 public class FamilyServiceImpl implements FamilyService {
-    private FamilyRepository familyRepository;
-    private UserRepository userRepository;
+    private final FamilyRepository familyRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public FamilyServiceImpl(FamilyRepository familyRepository, UserRepository userRepository) {
@@ -39,12 +39,17 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     @Override
-    public void addUserToFamily(UUID familyId, User user) {
+    public Family addUserToFamily(UUID familyId, UUID userId) {
         Family family = familyRepository.findById(familyId)
                 .orElseThrow(() -> new IllegalArgumentException("Family not found: " + familyId));
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+
         user.setFamily(family);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        family.getMembers().add(savedUser);
+        return family;
     }
 
     @Override
