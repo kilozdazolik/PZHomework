@@ -1,7 +1,8 @@
 package com.TakeHome.PZ.services;
 
-import com.TakeHome.PZ.models.User;
+import com.TakeHome.PZ.dto.UserResponseDTO;
+import java.util.UUID;
 
 public interface UserService {
-    User saveUser(String name);
+    UserResponseDTO createUser(String name, UUID familyId);
 }

@@ -21,7 +21,7 @@ public class Family {
 
     private String name;
 
-    @OneToMany(mappedBy = "family")
+    @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<User> members = new ArrayList<>();
 }
