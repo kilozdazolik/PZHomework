@@ -26,4 +26,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Theme theme;
+
+    @ManyToOne
+    private Family family;
 }
