@@ -8,6 +8,8 @@ import com.TakeHome.PZ.dto.UserRequestDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,7 +23,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO request) {
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO request) {
         return new ResponseEntity<>(userService.createUser(request.getName(), request.getFamilyId()), HttpStatus.CREATED);
     }
 }
