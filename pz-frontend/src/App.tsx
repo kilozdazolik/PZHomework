@@ -1,9 +1,7 @@
+import LandingPage from './views/LandingPage'
+
 function App() {
-  return (
-    <>
-      <h1>PZ Desktop Dashboard</h1>
-    </>
-  )
+  return <LandingPage />
 }
 
 export default App

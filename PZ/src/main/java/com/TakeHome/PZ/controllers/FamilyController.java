@@ -1,8 +1,12 @@
 package com.TakeHome.PZ.controllers;
 
 import com.TakeHome.PZ.dto.FamilyMemberRequestDTO;
+import com.TakeHome.PZ.dto.FamilyRequestDTO;
 import com.TakeHome.PZ.models.Family;
 import com.TakeHome.PZ.services.FamilyService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +33,9 @@ public class FamilyController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Family> createFamily(@RequestParam String name) {
-		Family created = familyService.saveFamily(name);
-		return new ResponseEntity<>(created, HttpStatus.CREATED);
+	public ResponseEntity<Family> createFamily(@Valid @RequestBody FamilyRequestDTO request) {
+    	Family created = familyService.saveFamily(request.getName());
+    	return new ResponseEntity<>(created, HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/{id}")
