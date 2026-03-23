@@ -40,3 +40,7 @@ pz-frontend/dist/
 pz-frontend/.vscode/
 pz-frontend/.env.local
 pz-frontend/.env.*.local
+
+# Backend env
+PZ/.env
+PZ/.env.*
