@@ -1,35 +1,42 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Spring Boot (PZ backend)
+PZ/HELP.md
+PZ/target/
+PZ/.mvn/wrapper/maven-wrapper.jar
+PZ/!**/src/main/**/target/
+PZ/!**/src/test/**/target/
 
 ### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+PZ/.apt_generated
+PZ/.classpath
+PZ/.factorypath
+PZ/.project
+PZ/.settings
+PZ/.springBeans
+PZ/.sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+PZ/.idea
+PZ/*.iws
+PZ/*.iml
+PZ/*.ipr
 
 ### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+PZ//nbproject/private/
+PZ//nbbuild/
+PZ//dist/
+PZ//nbdist/
+PZ//.nb-gradle/
+PZ/build/
+PZ/!**/src/main/**/build/
+PZ/!**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
-src/main/resources/application.properties
-src/main/resources/application.properties
+PZ/.vscode/
+PZ/src/main/resources/application.properties
+
+# Frontend
+pz-frontend/node_modules/
+pz-frontend/dist/
+pz-frontend/.vscode/
+pz-frontend/.env.local
+pz-frontend/.env.*.local

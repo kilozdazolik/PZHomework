@@ -1,0 +1,98 @@
+.user-selection-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.user-selection-card {
+  width: min(100%, 48rem);
+  background: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+}
+
+.user-selection-card h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.user-selection-subtitle {
+  color: #5b576f;
+  margin-top: 0.65rem;
+  margin-bottom: 1.5rem;
+}
+
+.user-selection-error {
+  margin: 0 0 1rem;
+  color: #dc2626;
+  font-size: 0.95rem;
+}
+
+.empty-family-wrapper {
+  display: grid;
+  place-items: center;
+  min-height: 15rem;
+}
+
+.member-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.9rem;
+}
+
+.member-card,
+.member-add {
+  border: 0.1rem solid #d1d5db;
+  border-radius: 1rem;
+  background: #f8faff;
+  color: #1f1d2b;
+  min-height: 6.5rem;
+  cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+.member-card:hover,
+.member-add:hover {
+  transform: translateY(-0.08rem);
+  border-color: #2f6fed;
+}
+
+.member-card {
+  display: grid;
+  place-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem;
+}
+
+.member-name {
+  font-weight: 700;
+}
+
+.member-role {
+  font-size: 0.8rem;
+  color: #5b576f;
+}
+
+.member-add {
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+.member-add-large {
+  width: 8.5rem;
+  min-height: 8.5rem;
+  border-radius: 1.25rem;
+}
+
+.member-add:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+@media (max-width: 40rem) {
+  .user-selection-card {
+    padding: 1.4rem;
+  }
+}
