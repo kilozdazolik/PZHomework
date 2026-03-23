@@ -20,19 +20,12 @@ const readHistoryFromStorage = (storageKey: string): string[] => {
 };
 
 export function useBackgroundHistory(userId: string, currentBackgroundUrl?: string) {
-  const [revision, setRevision] = useState(0);
+  const [, setRevision] = useState(0);
   const storageKey = useMemo(() => `desktop-background-history:${userId}`, [userId]);
 
-  const backgroundHistory = useMemo(() => {
-    if (!userId) {
-      return [];
-    }
-
-    const fromStorage = readHistoryFromStorage(storageKey);
-    const fromCurrent = currentBackgroundUrl ? [currentBackgroundUrl] : [];
-
-    return normalizeHistory([...fromCurrent, ...fromStorage]);
-  }, [storageKey, userId, currentBackgroundUrl, revision]);
+  const fromStorage = userId ? readHistoryFromStorage(storageKey) : [];
+  const fromCurrent = currentBackgroundUrl ? [currentBackgroundUrl] : [];
+  const backgroundHistory = normalizeHistory([...fromCurrent, ...fromStorage]);
 
   const addBackgroundToHistory = useCallback((url: string) => {
     if (!userId) {

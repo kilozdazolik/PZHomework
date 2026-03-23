@@ -1,128 +1,95 @@
 package com.TakeHome.PZ.services.impl;
 
-import com.TakeHome.PZ.models.Application;
-import com.TakeHome.PZ.models.Enums.Role;
-import com.TakeHome.PZ.models.Enums.Theme;
-import com.TakeHome.PZ.models.Family;
-import com.TakeHome.PZ.models.User;
-import com.TakeHome.PZ.repository.ApplicationRepository;
-import com.TakeHome.PZ.repository.FamilyRepository;
+import com.TakeHome.PZ.dto.AiCommandResponseDTO;
 import com.TakeHome.PZ.repository.UserRepository;
+import com.TakeHome.PZ.services.AiCommandService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Component
 public class InteractiveSeederRunner implements CommandLineRunner {
-    private static final Pattern NAME_PATTERN = Pattern.compile("^[\\p{L}\\s'-]+$");
-    private static final int MIN_NAME_LENGTH = 2;
-    private static final int MAX_NAME_LENGTH = 50;
-
-    private final FamilyRepository familyRepository;
+    private final AiCommandService aiCommandService;
     private final UserRepository userRepository;
-    private final ApplicationRepository applicationRepository;
 
     public InteractiveSeederRunner(
-            FamilyRepository familyRepository,
             UserRepository userRepository,
-            ApplicationRepository applicationRepository
+            AiCommandService aiCommandService
     ) {
-        this.familyRepository = familyRepository;
         this.userRepository = userRepository;
-        this.applicationRepository = applicationRepository;
+        this.aiCommandService = aiCommandService;
     }
 
     @Override
     public void run(String... args) {
         Scanner scanner = new Scanner(System.in);
+        UUID userId = promptValidUserId(scanner);
+        boolean awaitingAppName = false;
 
-        System.out.println("=== Interactive Seeder ===");
-        System.out.print("Do you want to add a user with favorite apps? (y/n): ");
-        String shouldSeed = scanner.nextLine().trim();
+        String userLabel = userRepository.findById(userId)
+                .map(user -> user.getName())
+                .orElse(userId.toString());
 
-        if (!"y".equalsIgnoreCase(shouldSeed) && !"yes".equalsIgnoreCase(shouldSeed)) {
-            System.out.println("Seeder skipped.");
-            return;
-        }
+        System.out.println("LLM: Welcome " + userLabel + ", what do you want to do?");
+        System.out.println("Type 'exit' to quit.");
 
-        String familyName = promptValidName(scanner, "Family name");
-        String userName = promptValidName(scanner, "User name");
+        while (true) {
+            System.out.print("You: ");
+            String prompt = scanner.nextLine().trim();
 
-        System.out.print("Favorite apps (comma separated, e.g. Spotify, VS Code): ");
-        String appsInput = scanner.nextLine().trim();
-
-        Set<String> favoriteApps = Arrays.stream(appsInput.split(","))
-                .map(String::trim)
-                .filter(name -> !name.isEmpty())
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-
-        if (favoriteApps.isEmpty()) {
-            System.out.println("At least one favorite app is required. Seeder cancelled.");
-            return;
-        }
-
-        Family family = familyRepository.findByNameIgnoreCase(familyName)
-                .orElseGet(() -> familyRepository.save(Family.builder().name(familyName).build()));
-
-        User user = userRepository.findByNameIgnoreCase(userName)
-                .orElseGet(() -> {
-                    Role role = userRepository.countByFamilyId(family.getId()) == 0 ? Role.ADMIN : Role.USER;
-                    User createdUser = User.builder()
-                            .name(userName)
-                            .role(role)
-                            .theme(Theme.LIGHT)
-                            .family(family)
-                            .build();
-                    return userRepository.save(createdUser);
-                });
-
-        if (user.getFamily() == null || !family.getId().equals(user.getFamily().getId())) {
-            user.setFamily(family);
-            user = userRepository.save(user);
-        }
-
-        List<String> existingApps = applicationRepository.findByUserId(user.getId()).stream()
-                .map(Application::getName)
-                .toList();
-
-        int addedCount = 0;
-        for (String appName : favoriteApps) {
-            boolean exists = existingApps.stream().anyMatch(existing -> existing.equalsIgnoreCase(appName));
-            if (!exists) {
-                applicationRepository.save(new Application(null, appName, user));
-                addedCount++;
+            if (prompt.equalsIgnoreCase("exit")) {
+                System.out.println("LLM: Bye.");
+                return;
             }
-        }
 
-        System.out.println("Seeder completed successfully.");
-        System.out.println("Family: " + family.getName());
-        System.out.println("User: " + user.getName());
-        System.out.println("Added apps: " + addedCount);
+            String normalizedPrompt = prompt.toLowerCase();
+            if (awaitingAppName
+                    && !normalizedPrompt.startsWith("open app")
+                    && !normalizedPrompt.startsWith("launch app")) {
+                prompt = "open app " + prompt;
+            }
+
+            AiCommandResponseDTO response = handlePrompt(userId, prompt);
+            String clarification = response.getClarificationQuestion();
+            awaitingAppName = response.isNeedsClarification()
+                    && clarification != null
+                    && (clarification.toLowerCase().contains("app") || clarification.toLowerCase().contains("alkalmaz"));
+            System.out.println();
+        }
     }
 
-    private static String promptValidName(Scanner scanner, String fieldLabel) {
+    private UUID promptValidUserId(Scanner scanner) {
         while (true) {
-            System.out.print(fieldLabel + ": ");
-            String input = scanner.nextLine().trim();
+            System.out.print("User ID (UUID): ");
+            String rawUserId = scanner.nextLine().trim();
 
-            if (input.length() < MIN_NAME_LENGTH || input.length() > MAX_NAME_LENGTH) {
-                System.out.printf("%s must be between %d and %d characters.%n", fieldLabel, MIN_NAME_LENGTH, MAX_NAME_LENGTH);
-                continue;
+            try {
+                return UUID.fromString(rawUserId);
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Invalid user ID format. Please try again.");
             }
+        }
+    }
 
-            if (!NAME_PATTERN.matcher(input).matches()) {
-                System.out.println(fieldLabel + " can only contain letters, spaces, apostrophes, and hyphens.");
-                continue;
+    private AiCommandResponseDTO handlePrompt(UUID userId, String prompt) {
+        try {
+            AiCommandResponseDTO response = aiCommandService.handlePrompt(userId.toString(), prompt, true);
+
+            System.out.println("LLM: " + response.getMessage());
+            if (response.isNeedsClarification() && response.getClarificationQuestion() != null) {
+                System.out.println("LLM: " + response.getClarificationQuestion());
             }
-
-            return input;
+            return response;
+        } catch (RuntimeException ex) {
+            System.out.println("LLM: Valami hiba tortent a feldolgozas kozben. Probald ujra.");
+            return new AiCommandResponseDTO(
+                    "UNKNOWN",
+                    "Valami hiba tortent a feldolgozas kozben.",
+                    false,
+                    null
+            );
         }
     }
 }
