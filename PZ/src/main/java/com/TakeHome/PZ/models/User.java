@@ -28,6 +28,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Theme theme;
 
+    @Column(length = 10000)
+    private String backgroundImageUrl;
+
     @JsonIgnore
     @ManyToOne
     private Family family;

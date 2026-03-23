@@ -1,0 +1,248 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  --desktop-ink: #17253b;
+  --desktop-muted: #4a5f7b;
+  --desktop-bg-a: #c8eaf3;
+  --desktop-bg-b: #f8f4e8;
+  --desktop-panel: rgba(255, 255, 255, 0.76);
+  --desktop-panel-edge: rgba(23, 37, 59, 0.16);
+  --desktop-accent: #2267a8;
+  --desktop-accent-2: #f28f3b;
+  --desktop-danger: #b83b3b;
+}
+
+.desktop-page.theme-light {
+  --desktop-ink: #17253b;
+  --desktop-muted: #4a5f7b;
+  --desktop-bg-a: #c8eaf3;
+  --desktop-bg-b: #f8f4e8;
+  --desktop-panel: rgba(255, 255, 255, 0.76);
+  --desktop-panel-edge: rgba(23, 37, 59, 0.16);
+  --desktop-accent: #2267a8;
+  --desktop-accent-2: #f28f3b;
+  --desktop-danger: #b83b3b;
+}
+
+.desktop-page.theme-dark {
+  --desktop-ink: #e8f1ff;
+  --desktop-muted: #a8b8d2;
+  --desktop-bg-a: #0f1a2a;
+  --desktop-bg-b: #1c2c45;
+  --desktop-panel: rgba(14, 23, 37, 0.82);
+  --desktop-panel-edge: rgba(169, 197, 243, 0.22);
+  --desktop-accent: #74b8ff;
+  --desktop-accent-2: #3e74d8;
+  --desktop-danger: #cf4d4d;
+}
+
+.desktop-page {
+  min-height: 100vh;
+  padding: 1.6rem;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(34, 103, 168, 0.26), transparent 34%),
+    radial-gradient(circle at 85% 5%, rgba(242, 143, 59, 0.26), transparent 30%),
+    linear-gradient(130deg, var(--desktop-bg-a), var(--desktop-bg-b));
+  font-family: 'Manrope', sans-serif;
+}
+
+.desktop-surface {
+  width: min(110rem, 100%);
+  margin: 0 auto;
+  border: 0.1rem solid var(--desktop-panel-edge);
+  border-radius: 2.2rem;
+  padding: 1.2rem;
+  background: var(--desktop-panel);
+  backdrop-filter: blur(1.2rem);
+  box-shadow: 0 2.6rem 6.4rem rgba(15, 28, 48, 0.18);
+}
+
+.desktop-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.desktop-menu-wrap {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.desktop-menu {
+  position: relative;
+}
+
+.desktop-menu summary {
+  list-style: none;
+  cursor: pointer;
+  border-radius: 99.9rem;
+  border: 0.1rem solid rgba(34, 103, 168, 0.25);
+  padding: 0.5rem 0.95rem;
+  background: color-mix(in srgb, var(--desktop-accent) 16%, transparent);
+  color: var(--desktop-ink);
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.desktop-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.desktop-menu-content {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  min-width: 22rem;
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.7rem;
+  border-radius: 1.2rem;
+  border: 0.1rem solid rgba(23, 37, 59, 0.15);
+  background: color-mix(in srgb, var(--desktop-panel) 92%, #ffffff 8%);
+  box-shadow: 0 1.4rem 2.4rem rgba(14, 26, 44, 0.2);
+  z-index: 2;
+}
+
+.desktop-menu-content button,
+.desktop-menu-content select {
+  border: 0.1rem solid rgba(23, 37, 59, 0.2);
+  border-radius: 1rem;
+  padding: 0.45rem 0.55rem;
+  background: color-mix(in srgb, var(--desktop-panel) 92%, #ffffff 8%);
+  color: var(--desktop-ink);
+}
+
+.desktop-menu-content button {
+  cursor: pointer;
+  text-align: left;
+}
+
+.desktop-menu-input {
+  border: 0.1rem solid rgba(23, 37, 59, 0.2);
+  border-radius: 1rem;
+  padding: 0.45rem 0.55rem;
+  background: color-mix(in srgb, var(--desktop-panel) 92%, #ffffff 8%);
+  color: var(--desktop-ink);
+  width: 100%;
+}
+
+.desktop-menu-content label {
+  color: var(--desktop-muted);
+  font-size: 0.84rem;
+}
+
+.desktop-secondary-button {
+  border: 0.1rem solid rgba(23, 37, 59, 0.22);
+  border-radius: 99.9rem;
+  padding: 0.5rem 1rem;
+  background: color-mix(in srgb, var(--desktop-panel) 90%, #ffffff 10%);
+  color: var(--desktop-ink);
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+}
+
+.desktop-danger {
+  color: #fff;
+  background: var(--desktop-danger) !important;
+  border-color: #8e2222 !important;
+}
+
+.desktop-header {
+  margin: 1.4rem 0 1rem;
+}
+
+.desktop-header h1 {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--desktop-ink);
+  font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+}
+
+.desktop-header p {
+  margin: 0.3rem 0 0;
+  color: var(--desktop-muted);
+}
+
+.desktop-error {
+  color: #b52727;
+  margin: 0 0 0.85rem;
+}
+
+.desktop-app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13.8rem, 1fr));
+  gap: 0.9rem;
+}
+
+.desktop-app-tile {
+  border: 0.1rem solid rgba(23, 37, 59, 0.16);
+  border-radius: 1.6rem;
+  padding: 0.85rem;
+  min-height: 12.2rem;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--desktop-panel) 84%, #ffffff 16%), color-mix(in srgb, var(--desktop-panel) 92%, #dce9ff 8%));
+  display: grid;
+  place-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 160ms ease;
+}
+
+.desktop-app-tile:hover {
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.9rem 1.8rem rgba(31, 57, 94, 0.16);
+}
+
+.desktop-app-tile-active {
+  border-color: var(--desktop-accent);
+  box-shadow: 0 0 0 0.2rem rgba(34, 103, 168, 0.2);
+}
+
+.desktop-app-glyph {
+  width: 5.2rem;
+  height: 5.2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 1.4rem;
+  background: linear-gradient(135deg, var(--desktop-accent), var(--desktop-accent-2));
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.desktop-app-label {
+  color: var(--desktop-ink);
+  font-weight: 700;
+  font-size: 0.93rem;
+  text-align: center;
+}
+
+.desktop-muted {
+  margin-top: 1rem;
+  color: var(--desktop-muted);
+}
+
+@media (max-width: 70rem) {
+  .desktop-page {
+    padding: 0.9rem;
+  }
+
+  .desktop-navbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .desktop-menu-wrap {
+    justify-content: flex-start;
+  }
+
+  .desktop-menu-content {
+    position: static;
+    margin-top: 0.45rem;
+  }
+}

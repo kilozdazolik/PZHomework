@@ -16,8 +16,8 @@ import com.TakeHome.PZ.models.Family;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private FamilyRepository familyRepository;
-    private UserRepository userRepository;
+    private final FamilyRepository familyRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserServiceImpl(FamilyRepository familyRepository, UserRepository userRepository) {
@@ -48,5 +48,24 @@ public class UserServiceImpl implements UserService {
     response.setRole(savedUser.getRole().name());
     response.setFamilyName(family.getName());
     return response;
+    }
+
+    @Override
+    public void updateBackgroundImage(UUID userId, String backgroundImageUrl) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User not found: " + userId));
+
+        String normalizedUrl = backgroundImageUrl == null ? null : backgroundImageUrl.trim();
+        user.setBackgroundImageUrl((normalizedUrl == null || normalizedUrl.isEmpty()) ? null : normalizedUrl);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateTheme(UUID userId, Theme theme) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User not found: " + userId));
+
+        user.setTheme(theme == null ? Theme.LIGHT : theme);
+        userRepository.save(user);
     }
 }

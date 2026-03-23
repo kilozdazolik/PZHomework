@@ -3,6 +3,7 @@ export type FamilyMember = {
     name: string;
     role: string;
     theme?: string;
+    backgroundImageUrl?: string;
 };
 
 export type FamilyResponse = {
