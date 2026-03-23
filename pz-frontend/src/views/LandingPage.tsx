@@ -1,14 +1,17 @@
 import './LandingPage.css'
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createFamily } from '../services/api';
 
 type Mode = null | 'existing' | 'new';
 
 function LandingPage() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>(null);
   const [familyId, setFamilyId] = useState('');
   const [lastName, setLastName] = useState('');
   const [lastNameError, setLastNameError] = useState('');
+  const [familyIdError, setFamilyIdError] = useState('');
 
   const validateFamilyName = (name: string): string => {
     const trimmed = name.trim();
@@ -28,12 +31,20 @@ function LandingPage() {
     return '';
   };
 
-  const handleExistingSubmit = (e: React.SubmitEvent) => {
+  const handleExistingSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-	    console.log('Keresett ID:', familyId);
+
+    const trimmedFamilyId = familyId.trim();
+    if (!trimmedFamilyId) {
+      setFamilyIdError('Add meg a csaladi azonositot.');
+      return;
+    }
+
+    setFamilyIdError('');
+    navigate(`/family/${trimmedFamilyId}`);
   };
 
-  const handleNewSubmit = async (e: React.SubmitEvent) => {
+  const handleNewSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationError = validateFamilyName(lastName);
@@ -44,9 +55,9 @@ function LandingPage() {
 
     try {
       const normalizedName = lastName.trim();
-      await createFamily(normalizedName);
+      const createdFamily = await createFamily(normalizedName);
       setLastNameError('');
-      console.log('Csalad letrehozva a nev alapjan:', normalizedName);
+      navigate(`/family/${createdFamily.id}`);
 
     } catch (err) {
       setLastNameError('Nem sikerült létrehozni a családot. Próbáld újra.');
@@ -88,10 +99,23 @@ function LandingPage() {
               id="familyId"
               type="text"
               value={familyId}
-              onChange={(e) => setFamilyId(e.target.value)}
+              onChange={(e) => {
+                setFamilyId(e.target.value);
+                if (familyIdError) {
+                  setFamilyIdError('');
+                }
+              }}
               placeholder="36 karakter hosszú egyedi azonosító"
+              className={familyIdError ? 'input-error' : ''}
+              aria-invalid={Boolean(familyIdError)}
+              aria-describedby={familyIdError ? 'familyId-error' : undefined}
               required
             />
+            {familyIdError && (
+              <p id="familyId-error" className="landing-error" role="alert">
+                {familyIdError}
+              </p>
+            )}
             <button type="submit" className="landing-button landing-button-primary">
               Belépés
             </button>

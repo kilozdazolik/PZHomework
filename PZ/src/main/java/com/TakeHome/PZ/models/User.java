@@ -2,6 +2,7 @@ package com.TakeHome.PZ.models;
 
 import com.TakeHome.PZ.models.Enums.Role;
 import com.TakeHome.PZ.models.Enums.Theme;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Theme theme;
 
+    @JsonIgnore
     @ManyToOne
     private Family family;
 }

@@ -9,6 +9,6 @@ public interface FamilyService {
     Optional<Family> findById(UUID id);
     Family saveFamily(String name);    
     void deleteFamily(UUID id);
-    Family addUserToFamily(UUID familyId, UUID userId);
+    Family addUserToFamily(UUID familyId, UUID userId, String name);
     void removeUserFromFamily(UUID familyId, UUID userId);
 }

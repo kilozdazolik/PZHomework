@@ -7,4 +7,5 @@ import java.util.UUID;
 @Data
 public class FamilyMemberRequestDTO {
     private UUID userId;
+    private String name;
 }

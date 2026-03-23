@@ -46,7 +46,7 @@ public class FamilyController {
 
 	@PostMapping("/{familyId}/members")
 	public ResponseEntity<Family> addUserToFamily(@PathVariable UUID familyId, @RequestBody FamilyMemberRequestDTO request) {
-		Family updatedFamily = familyService.addUserToFamily(familyId, request.getUserId());
+		Family updatedFamily = familyService.addUserToFamily(familyId, request.getUserId(), request.getName());
 		return new ResponseEntity<>(updatedFamily, HttpStatus.CREATED);
 	}
 
